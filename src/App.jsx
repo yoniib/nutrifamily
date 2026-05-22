@@ -1,42 +1,25 @@
-import { useState, useEffect } from 'react'
-import { supabase } from './lib/supabase'
-import RecipeCard from './components/RecipeCard/RecipeCard'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import BottomNav from './components/BottomNav'
+import Dashboard from './pages/Dashboard'
+import RecipeBook from './pages/RecipeBook'
+import WeeklyPlanner from './pages/WeeklyPlanner'
+import Pantry from './pages/Pantry'
+import ShoppingList from './pages/ShoppingList'
 
 function App() {
-  const [recipes, setRecipes] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchRecipes() {
-      const { data, error } = await supabase.from('recipes').select('*')
-      if (error) console.log(error)
-      else setRecipes(data)
-      setLoading(false)
-    }
-    fetchRecipes()
-  }, [])
-
-  if (loading) return (
-    <div className="min-h-screen bg-green-50 flex items-center justify-center">
-      <p className="text-green-700">Loading...</p>
-    </div>
-  )
-
   return (
-    <div className="min-h-screen bg-green-50 p-6">
-      <h1 className="text-3xl font-bold text-green-700 mb-6">NutriFamily 🥗</h1>
-      <div className="grid grid-cols-1 gap-4">
-        {recipes.map(recipe => (
-          <RecipeCard
-            key={recipe.id}
-            name={recipe.name}
-            mealType={recipe.meal_type}
-            cuisine={recipe.cuisine}
-            prepMinutes={recipe.prep_minutes}
-          />
-        ))}
+    <BrowserRouter>
+      <div className="min-h-screen bg-green-50 pb-16">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/recipes" element={<RecipeBook />} />
+          <Route path="/planner" element={<WeeklyPlanner />} />
+          <Route path="/pantry" element={<Pantry />} />
+          <Route path="/shopping" element={<ShoppingList />} />
+        </Routes>
+        <BottomNav />
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 
