@@ -1,4 +1,16 @@
+import { useEffect } from 'react'
+import { supabase } from './lib/supabase'
+
 function App() {
+  useEffect(() => {
+    async function testConnection() {
+      const { data, error } = await supabase.from('recipes').select('*')
+      console.log('Recipes:', data)
+      console.log('Error:', error)
+    }
+    testConnection()
+  }, [])
+
   return (
     <div className="min-h-screen bg-green-50 flex items-center justify-center">
       <div className="text-center">
